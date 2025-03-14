@@ -30,11 +30,11 @@ use const JSON_UNESCAPED_SLASHES;
 /**
  * A "box" with items.
  */
-readonly class PackedBox implements JsonSerializable
+class PackedBox implements JsonSerializable
 {
-    protected int $itemWeight;
+    protected readonly int $itemWeight;
 
-    protected float $volumeUtilisation;
+    protected readonly float $volumeUtilisation;
 
     /**
      * Get packed weight.
@@ -203,7 +203,7 @@ readonly class PackedBox implements JsonSerializable
         return 'https://boxpacker.io/en/master/visualiser.html?packing=' . json_encode($data, flags: JSON_THROW_ON_ERROR | JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
-    public function __construct(public Box $box, public PackedItemList $items)
+    public function __construct(public readonly Box $box, public readonly PackedItemList $items)
     {
         assert($this->assertPackingCompliesWithRealWorld());
     }
@@ -237,7 +237,7 @@ readonly class PackedBox implements JsonSerializable
      * Validate that all items are placed solely within the confines of the box, and that no two items are placed
      * into the same physical space.
      */
-    private function assertPackingCompliesWithRealWorld(): true
+    private function assertPackingCompliesWithRealWorld(): bool
     {
         /** @var PackedItem[] $itemsToCheck */
         $itemsToCheck = iterator_to_array($this->items);
